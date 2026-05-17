@@ -1,0 +1,78 @@
+project:
+  name: contextual-xg-thesis
+
+# ── Shared pitch constants (DRY: defined once, referenced below) ──────────────
+_pitch: &pitch
+  pitch_length_m: 105.0   # Standard Superliga pitch length (metres)
+  pitch_width_m:  68.0    # Standard Superliga pitch width (metres)
+
+_goal: &goal
+  goal_width_m: 7.32      # FIFA standard goal width (metres)
+
+paths:
+  outputs_root: "code/data_pipeline/outputs"
+
+files:
+  event_f24_xml: "/Users/mariusschonberg/Desktop/Speciale/data/raw/Superliga 2024-2025 (Test Data)/2024-07-21 SIF - SJE/2021-07-21 SIF - SJE/f24-100-2024-2442547-eventdetails.xml"
+  event_f7_xml: "/Users/mariusschonberg/Desktop/Speciale/data/raw/Superliga 2024-2025 (Test Data)/2024-07-21 SIF - SJE/2021-07-21 SIF - SJE/srml-100-2024-f2442547-matchresults.xml"
+  tracking_metadata_xml: "/Users/mariusschonberg/Desktop/Speciale/data/raw/Superliga 2024-2025 (Test Data)/2024-07-21 SIF - SJE/2021-07-21 SIF - SJE/20240721-SIF-SJE_613e78b3-8e1f-4170-b1e2-c1965b26821b_SecondSpectrum_Metadata.xml"
+  tracking_raw_file: "/Users/mariusschonberg/Desktop/Speciale/data/raw/Superliga 2024-2025 (Test Data)/2024-07-21 SIF - SJE/2021-07-21 SIF - SJE/20240721-SIF-SJE_613e78b3-8e1f-4170-b1e2-c1965b26821b_SecondSpectrum_Data.jsonl"
+
+outputs:
+  shots_clean_csv: "code/data_pipeline/outputs/2442547_shots_clean.csv"
+  shots_aligned_csv: "code/data_pipeline/outputs/2442547_shots_aligned.csv"
+  shots_pressure_csv: "code/data_pipeline/outputs/2442547_shots_pressure.csv"
+  shots_structure_csv: "code/data_pipeline/outputs/2442547_shots_structure.csv"
+  shots_advanced_context_csv: "code/data_pipeline/outputs/2442547_shots_advanced_context.csv"
+  shots_obstruction_csv: "code/data_pipeline/outputs/2442547_shots_obstruction.csv"
+  shots_goalkeeper_csv: "code/data_pipeline/outputs/2442547_shots_goalkeeper.csv"
+  shots_tempo_csv: "code/data_pipeline/outputs/2442547_shots_tempo.csv"
+  features_final_csv: "code/data_pipeline/outputs/2442547_features_final.csv"
+  classic_xg_csv: "code/xg_baseline/outputs/classic_xg/2442547_classic_xg.csv"
+  model_suite_csv: "code/xg_baseline/outputs/classic_xg/2442547_model_suite.csv"
+
+alignment:
+  n_batches: "smart"   # "smart" = auto-detect; or integer number of batches
+  offset: 1.0          # Seconds to offset event timestamps (annotation delay)
+
+pressure:
+  <<: *pitch
+  d_front_mode: "variable"   # Herold pressure model variant ("variable" or "fixed")
+  d_back: 3.0                # Rear pressure radius (metres)
+  q: 1.75                    # Exponent in pressure decay function
+
+structure:
+  <<: *pitch
+
+obstruction:
+  pitch_length_m: 105.0
+  <<: *goal
+
+advanced_context:
+  pitch_length_m: 105.0
+  <<: *goal
+  fast_break_threshold_s: 8.0   # Seconds threshold to classify a fast break
+
+goalkeeper:
+  pitch_length_m: 105.0
+
+tempo: {}
+
+movement:
+  radius_m: 5.0    # defender-selection radius around the shooter (metres)
+  n_frames: 3      # number of prior frames for velocity estimation (Δt = 0.04 s each)
+
+modeling:
+  run_model_suite: true
+  group_col: "game_id"
+  n_splits: 3  # GroupKFold with 3 splits over 4 matches; pooled AUC reproduces pilot results
+
+pipeline:
+  features:
+    pressure: true
+    structure: true
+    advanced_context: true
+    obstruction: true
+    goalkeeper: true
+    tempo: true
+    movement: true
