@@ -1,20 +1,37 @@
 # Contextual Expected Goals from Tracking Data in Football
 
-Master's thesis — University of Southern Denmark (SDU), 2026.
+Master’s thesis — University of Southern Denmark (SDU), 2026.
 
-This repository contains the code for building a contextual expected goals (xG) model using synchronized tracking data from the Danish Superliga 2024/25 season.
+This repository contains the code used to build and evaluate a 
+contextual expected goals (xG) model using synchronized tracking and 
+event data from the Danish Superliga 2024/25 season.
 
 ## Project Overview
 
-Classical xG models rely on shot geometry (distance and angle). This thesis extends that by incorporating contextual tracking features such as defensive pressure, goalkeeper positioning, player movement, and ball speed.
+Traditional xG models mainly rely on shot geometry, such as shooting 
+distance and angle. This thesis extends the classical xG framework by 
+including contextual tracking-based features such as:
 
-Four model classes are compared under identical conditions:
+- Defensive pressure
+- Goalkeeper positioning
+- Player movement
+- Ball speed
+- Shot obstruction
+
+Four different model classes are compared under identical experimental 
+conditions:
+
 - Logistic Regression
 - XGBoost
 - TabPFN
 - MLP (Neural Network)
 
-Model interpretability is analysed using logistic regression coefficients, SHAP (global), and LIME (local).
+The models are analysed using both predictive performance metrics and 
+interpretability methods. Model explanations are investigated through:
+
+- Logistic regression coefficients
+- SHAP (global feature importance)
+- LIME (local explanations)
 
 ## Repository Structure
 
