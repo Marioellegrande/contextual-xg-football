@@ -1,5 +1,0 @@
-model,auc,log_loss
-LogReg,0.6591,0.5735
-XGBoost,0.8864,0.2048
-TabPFN,0.8409,0.2262
-MLP,0.5682,0.4866
