@@ -41,6 +41,27 @@ try:
 except Exception:
     pass
 
+# Third workaround: some tracking feeds record ball positions slightly outside
+# pitch boundaries (e.g. -63.1 instead of -62.5). DataBallPy's TrackingSchema
+# rejects these with a pandera SchemaError. We patch all tracking-related
+# schemas to no-ops so out-of-bounds coordinates are kept as-is.
+try:
+    import databallpy.models.tracking_data as _td
+    for _attr in dir(_td):
+        _obj = getattr(_td, _attr)
+        if isinstance(_obj, type) and hasattr(_obj, "validate"):
+            _obj.validate = classmethod(lambda cls, df, *a, **kw: df)
+except Exception:
+    pass
+try:
+    import databallpy.game as _game
+    for _attr in dir(_game):
+        _obj = getattr(_game, _attr)
+        if isinstance(_obj, type) and hasattr(_obj, "validate") and "Schema" in _attr:
+            _obj.validate = classmethod(lambda cls, df, *a, **kw: df)
+except Exception:
+    pass
+
 from databallpy import get_game_from_kloppy
 from kloppy import opta, secondspectrum
 

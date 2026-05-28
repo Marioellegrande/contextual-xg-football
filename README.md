@@ -39,17 +39,16 @@ interpretability methods. Model explanations are investigated through:
 code/
 ├── data_pipeline/       # Shot extraction and event-tracking alignment
 ├── features/            # Feature engineering (pressure, goalkeeper, obstruction)
-├── models/              # Model training and evaluation notebooks
-│   ├── Utils.py         # Shared utilities (features, encoding, evaluation)
-│   ├── analysis/        # SHAP and LIME analysis notebooks
-│   └── ...
-├── figures/             # Figure generation scripts
-└── visualization/       # Visualization scripts
+└── models/              # Model training and evaluation notebooks
+    ├── Utils.py         # Shared utilities (features, encoding, evaluation)
+    ├── training/        # Model training and evaluation
+    ├── analysis/        # SHAP and LIME analysis notebooks
+    └── Validering/      # Match and season simulation notebooks
 ```
 
 ## Data
 
-The dataset consists of 4,957 shots from 189 Superliga matches. Raw data (Opta events + Second Spectrum tracking) is not included in this repository.
+The dataset consists of 5,056 shots from 192 Danish Superliga 2024/25 matches, of which 601 (11.9%) result in goals. Raw data (Opta events + Second Spectrum tracking) is not included in this repository.
 
 ## Dependencies
 
